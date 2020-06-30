@@ -5,7 +5,8 @@ const getValidMatrix = state => (i, j) => base.pipe(
     checkForwardTiles(state)(i, j),
     checkPawnCapture(state)(i, j, 1),
     checkPawnCapture(state)(i, j, -1),
-    // checkEnPassant(state)(i, j)
+    checkEnpassant(state)(i, j, 1),
+    checkEnpassant(state)(i, j, -1)
 )(base.replace2d(i, j)('x')(board.ZEROS))
 
 const checkForwardTiles = state => (i, j) => mat => board.getCodeAt(state)(i, j + 1) == 0 // can move one?
@@ -18,7 +19,9 @@ const checkPawnCapture = state => (i, j, dir) => mat => board.areDifferentTeam(s
     ? base.replace2d(i + dir, j + 1)(1)(mat)
     : mat
 
-// const checkEnPassant = state => (i, j, dir) => mat => 
+const checkEnpassant = state => (i, j, dir) => mat => state.enpassant && base.pointEq(state.enpassant)({i: i + dir, j})
+    ? base.replace2d(i + dir, j + 1)(1)(mat)
+    : mat
 
 // const pawnCheck
 

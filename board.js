@@ -10,12 +10,16 @@ const zeroBoard = [
 ]
 
 const flip = mat => mat.reverse().forEach(arr => arr.reverse())
+
 const getCodeAt = state => (i, j) => state.board[i] && state.board[i][j]
 const getTeamCode = x => x && x.toUpperCase
     ? x.toUpperCase() == x
     : undefined
-const areSameTeam = state => (i1, j1) => (i2, j2) => getTeamCode(getCodeAt(state)(i1, j1)) == getTeamCode(getCodeAt(state)(i2, j2))
 
+const pieceToMove = state => getCodeAt(state)(...state.move[0])
+const pieceAtMoveEnd = state => getCodeAt(state)(...state.move[1])
+
+const areSameTeam = state => (i1, j1) => (i2, j2) => getTeamCode(getCodeAt(state)(i1, j1)) == getTeamCode(getCodeAt(state)(i2, j2))
 const areDifferentTeam = state => (i1, j1) => (i2, j2) => {
     const c1 = getTeamCode(getCodeAt(state)(i1, j1))
     const c2 = getTeamCode(getCodeAt(state)(i2, j2))
@@ -34,6 +38,10 @@ module.exports = {
     flip,
     getCodeAt,
     getTeamCode,
+
+    pieceToMove,
+    pieceAtMoveEnd,
+
     areSameTeam,
     areDifferentTeam,
 
