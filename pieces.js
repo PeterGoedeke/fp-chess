@@ -68,10 +68,66 @@ const getKnightMoves = state => (i, j) => mat => base.pipe(
     checkSquare(state)(i, j, -1, 2),
 )(base.replace2d(i, j)('x')(mat))
 
+const getSimpleKingMoves = state => (i, j) => mat => base.pipe(
+    checkSquare(state)(i, j, 1, -1),
+    checkSquare(state)(i, j, 1, 0),
+    checkSquare(state)(i, j, 1, 1),
+    checkSquare(state)(i, j, -1, -1),
+    checkSquare(state)(i, j, -1, 0),
+    checkSquare(state)(i, j, -1, 1),
+    checkSquare(state)(i, j, 0, 1),
+    checkSquare(state)(i, j, 0, -1),
+)(mat)
+
+const getKingMoves = state => (i, j) => mat => {
+    const attackedSquares = getAttackedSquares(state)(board.getOpposingTeamAt(state)(i, j))
+    return getSimpleKingMoves(state)(i, j)(mat).map((row, rowIndex) => row.map((col, colIndex) => col && !attackedSquares[rowIndex][colIndex] ? 1 : 0))
+}
+
+// const applyMovesOfType = (state) => (i, j) => 
+
+const getPieceMoves = state => (i, j) => mat => board.is.pawn(state)(i, j)
+    ? getPawnMoves(state)(i, j)(mat)
+    : board.is.bishop(state)(i, j)
+    ? getBishopMoves(state)(i, j)(mat)
+    : board.is.knight(state)(i, j)
+    ? getKnightMoves(state)(i, j)(mat)
+    : board.is.rook(state)(i, j)
+    ? getRookMoves(state)(i, j)(mat)
+    : board.is.queen(state)(i, j)
+    ? getQueenMoves(state)(i, j)(mat)
+    : board.is.king(state)(i, j)
+    ? getSimpleKingMoves(state)(i, j)(mat)
+    : mat
+
+const getPieceMovesIfTeam = state => (i, j) => mat => teamCode => board.teamAtIs(state)(i, j)(teamCode)
+    ? getPieceMoves(state)(i, j)(mat)
+    : mat
+
+const getAttackedSquares = state => teamCode => state.board.reduce((acc, cur, i) =>
+    cur.reduce((rowAcc, _, j) => getPieceMovesIfTeam(state)(i, j)(rowAcc)(teamCode), acc), board.ZEROS)
+
+const kingOfTeamChecked = state => teamCode => {
+    const { i, j } = board.findKing(state)(teamCode)
+    return getAttackedSquares(state)(!teamCode)[i][j] == 1
+}
+
+// const getAttackedSquares = state => teamCode => (i = 0, j = 0) => mat => !base.atMatrixEnd(i, j)(mat)
+//     ? getAttackedSquares board.teamAtIs(state)(i, j)(!teamCode)
+//     : mat
+
+// board.teamAtIs(state)(i, j)(!teamCode)
+//     ? getAttackedSquares applyMovesOfType(state)(i, j)(mat)
+    // :
+
 module.exports = {
     pawn: getPawnMoves,
     rook: getRookMoves,
     bishop: getBishopMoves,
     queen: getQueenMoves,
     knight: getKnightMoves,
+    king: getKingMoves,
+    at: getPieceMoves,
+    getAttackedSquares,
+    kingOfTeamChecked
 }
