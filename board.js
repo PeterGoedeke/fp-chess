@@ -1,3 +1,5 @@
+const base = require('./base')
+
 const zeroBoard = [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
@@ -45,7 +47,7 @@ const findKing = state => teamCode => state.board.reduce((acc, cur, j) =>
 
 // const which = state => (i, j) => Object.getOwnPropertyNames(is).find(func => func(state)(i, j))
 
-const pieceToMove = state => getCodeAt(state)(...state.move[0])
+const pieceToMove = state => getCodeAt(state)(state.move[0].i, state.move[0].j)
 const pieceAtMoveEnd = state => getCodeAt(state)(...state.move[1])
 
 const areSameTeam = state => (i1, j1) => (i2, j2) => getTeamCode(getCodeAt(state)(i1, j1)) == getTeamCode(getCodeAt(state)(i2, j2))

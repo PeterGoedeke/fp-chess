@@ -12,7 +12,9 @@ const scalarDirection = x => !x
 
 const merge = o1 => o2 => Object.assign({}, o1, o2)
 const prop = k => o => o[k]
+const invProp = k => o => !o[k]
 const pipe = (...fns) => x => [...fns].reduce((acc, f) => f(acc), x)
+const objOf = k => v => ({ [k]: v })
 const spec = o => x => Object.keys(o)
   .map(k => objOf(k)(o[k](x)))
   .reduce((acc, o) => Object.assign(acc, o))
@@ -39,7 +41,9 @@ module.exports = {
     
     merge,
     prop,
+    invProp,
     pipe,
+    objOf,
     spec,
 
     atMatrixEnd,
