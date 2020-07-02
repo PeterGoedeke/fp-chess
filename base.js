@@ -4,11 +4,20 @@ const getUnitVector = (i1, j1) => (i2, j2) => {
 }
 const pointEq = p1 => p2 => p1.i == p2.i && p1.j == p2.j
 const pointDistance = p1 => p2 => Math.sqrt(Math.pow(p1.i - p2.i, 2) + Math.pow(p1.j - p2.j, 2))
+const scalarDirection = x => !x
+    ? false
+    : x > 0
+        ? 1
+        : -1
 
 const merge = o1 => o2 => Object.assign({}, o1, o2)
 const prop = k => o => o[k]
 const pipe = (...fns) => x => [...fns].reduce((acc, f) => f(acc), x)
+const spec = o => x => Object.keys(o)
+  .map(k => objOf(k)(o[k](x)))
+  .reduce((acc, o) => Object.assign(acc, o))
 
+const atMatrixEnd = (i, j) => mat => i == mat.length && mat[0] && mat[0].length == j
 const replace = arr => i => x => Object.assign([], arr, { [i]: x })
 const replace2d = (i, j) => x => mat => Object.assign([], mat, { [i]: replace(mat[i])(j)(x) })
 
@@ -26,11 +35,14 @@ module.exports = {
     getUnitVector,
     pointEq,
     pointDistance,
+    scalarDirection,
     
     merge,
     prop,
     pipe,
+    spec,
 
+    atMatrixEnd,
     replace,
     replace2d,
     replaceBetween,
