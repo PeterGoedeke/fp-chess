@@ -57,9 +57,21 @@ const checkSquare = state => (i, j, dI, dJ) => mat => board.areDifferentTeam(sta
     ? base.replace2d(i + dI, j + dJ)(1)(mat)
     : mat
 
+const getKnightMoves = state => (i, j) => mat => base.pipe(
+    checkSquare(state)(i, j, 1, 2),
+    checkSquare(state)(i, j, 2, 1),
+    checkSquare(state)(i, j, 2, -1),
+    checkSquare(state)(i, j, 1, -2),
+    checkSquare(state)(i, j, -1, -2),
+    checkSquare(state)(i, j, -2, -1),
+    checkSquare(state)(i, j, -2, 1),
+    checkSquare(state)(i, j, -1, 2),
+)(base.replace2d(i, j)('x')(mat))
+
 module.exports = {
     pawn: getPawnMoves,
     rook: getRookMoves,
     bishop: getBishopMoves,
     queen: getQueenMoves,
+    knight: getKnightMoves,
 }
