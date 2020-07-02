@@ -30,6 +30,11 @@ const pawnMoveDirectionForTeam = state => (i, j) => teamAtIs(state)(i, j)(1)
 const pawnStartingLocationForTeam = state => (i, j) => teamAtIs(state)(i, j)(1)
     ? 1
     : 6
+const pawnPromotionRowForTeam = state => (i, j) => teamAtIs(state)(i, j)(1)
+    ? 7
+    : 0
+
+const pawnMustPromote = state => (i, j) => pawnPromotionRowForTeam(state)(i, j) == j
 
 const isPiece = x => y => (typeof x) === 'string' && x.toUpperCase() === y
 const isPieceAt = y => state => (i, j) => isPiece(getCodeAt(state)(i, j))(y)
@@ -62,6 +67,9 @@ const areDifferentTeam = state => (i1, j1) => (i2, j2) => {
 
 const isWhite = x => x.toUpperCase() == x
 const isBlack = x => x.toLowerCase() == x
+const convertToTeam = x => y => y && y.toLowerCase && getTeamCode(x)
+    ? y.toUpperCase()
+    : y.toLowerCase()
 
 module.exports = {
     ZEROS: zeroBoard,
@@ -80,6 +88,7 @@ module.exports = {
     isPieceAt,
     is,
     findKing,
+    pawnMustPromote,
     
     pieceToMove,
     pieceAtMoveEnd,
@@ -88,5 +97,6 @@ module.exports = {
     areDifferentTeam,
 
     isWhite,
-    isBlack
+    isBlack,
+    convertToTeam
 }

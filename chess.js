@@ -11,7 +11,7 @@ const pieces = require('./pieces')
 
 const initialState = {
     board: [
-        ['R', 'P', 0, 0, 0, 0, 'p', 'r'],
+        ['R', 'P', 0, 0, 0, 0, 'P', 0],
         ['N', 'P', 0, 0, 0, 0, 'p', 'n'],
         ['B', 'P', 0, 0, 0, 0, 'p', 'b'],
         ['Q', 'P', 0, 0, 0, 'N', 'r', 'q'],
@@ -52,9 +52,14 @@ const validMove = state => move => !!move
 
 // check if black and if black then flip before pipeing otherwise just pipe
 
+const promotePawn = state => (i, j) => mat => board.pawnMustPromote({ board: mat })(i, j)
+    ? base.replace2d(i, j)(board.convertToTeam(board.getCodeAt({ board: mat })(i, j))('q'))(mat)
+    : mat
+
 const applyMove = state => move => base.pipe(
     base.replace2d(move[1].i, move[1].j)(board.getCodeAt(state)(move[0].i, move[0].j)),
     base.replace2d(move[0].i, move[0].j)(0),
+    promotePawn(state)(move[1].i, move[1].j)
     // check for en passant and apply it here
     // check for castling and apply it here
     // check for queening and apply it here
@@ -70,7 +75,6 @@ const next = base.spec({
     move: clear,
     enpassant: nextEnpassant
 })
-
 
 const enqueueMove = state => move => validMove(state)(move)
     ? base.merge(state)({ move })
