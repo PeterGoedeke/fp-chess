@@ -113,12 +113,12 @@ const getPieceMovesIfTeam = state => (i, j) => mat => teamCode => board.teamAtIs
     ? getPieceMoves(state)(i, j)(mat)
     : mat
 
-const getAttackedSquares = state => teamCode => state.board.reduce((acc, cur, i) =>
-    cur.reduce((rowAcc, _, j) => getPieceMovesIfTeam(state)(i, j)(rowAcc)(teamCode), acc), board.ZEROS)
+const getAttackedSquares = state => team => state.board.reduce((acc, cur, i) =>
+    cur.reduce((rowAcc, _, j) => getPieceMovesIfTeam(state)(i, j)(rowAcc)(team), acc), board.ZEROS)
 
-const kingOfTeamChecked = state => teamCode => {
-    const { i, j } = board.findKing(state)(teamCode)
-    return getAttackedSquares(state)(!teamCode)[i][j] == 1
+const teamInCheck = state => team => {
+    const { i, j } = board.findKing(state)(team)
+    return getAttackedSquares(state)(!team)[i][j] == 1
 }
 
 // const getAttackedSquares = state => teamCode => (i = 0, j = 0) => mat => !base.atMatrixEnd(i, j)(mat)
@@ -129,6 +129,8 @@ const kingOfTeamChecked = state => teamCode => {
 //     ? getAttackedSquares applyMovesOfType(state)(i, j)(mat)
     // :
 
+const canMoveFromTo = state => s => e => getPieceMoves(state)(s.i, s.j)(board.ZEROS)[e.i][e.j]
+
 module.exports = {
     pawn: getPawnMoves,
     rook: getRookMoves,
@@ -138,5 +140,6 @@ module.exports = {
     king: getKingMoves,
     at: getPieceMoves,
     getAttackedSquares,
-    kingOfTeamChecked
+    teamInCheck,
+    canMoveFromTo
 }
