@@ -2,6 +2,8 @@
 
 import Data.List
 import Data.Char
+import Control.Bool
+
 data Team = Black | White deriving (Show, Eq)
 
 data PieceType = Pawn
@@ -58,6 +60,8 @@ teamIs :: PieceOf -> Team -> Maybe Bool
 teamIs (Piece _ t) team = Just $ t == team
 teamIs (None) team = Nothing
 
+teamIsnt :: PieceOf -> Team -> Maybe Bool
+teamIsnt = (notM .) . teamIs
 
 main = do 
     putStrLn $ showBoard initialBoard
