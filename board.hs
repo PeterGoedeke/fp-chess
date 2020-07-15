@@ -1,35 +1,12 @@
 {-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
 
+module Board where
+
+import Types
+
 import Data.List
 import Data.Char
 import Control.Bool
-
-data Team = Black | White deriving (Show, Eq)
-
-data PieceType = Pawn
-    | Rook
-    | Knight
-    | Bishop
-    | King
-    | Queen
-
-data PieceOf = Piece PieceType Team | None
-
-instance Show PieceOf where
-    show (Piece Pawn t) = caseFromTeam t "p"
-    show (Piece Rook t) = caseFromTeam t "r"
-    show (Piece Knight t) = caseFromTeam t "n"
-    show (Piece Bishop t) = caseFromTeam t "b"
-    show (Piece King t) = caseFromTeam t "k"
-    show (Piece Queen t) = caseFromTeam t "q"
-    show None = "0"
-
-type Board = [[PieceOf]]
-type Point = (Int, Int)
-    
-caseFromTeam White = map toUpper
-caseFromTeam Black = map toLower
-
 
 teamlessBackRow = [Piece Rook, Piece Knight, Piece Bishop, Piece Queen, Piece King, Piece Bishop, Piece Knight, Piece Rook]
 teamlessPawnRow = replicate 8 (Piece Pawn)
@@ -45,7 +22,6 @@ showBoard = unlines . map (intercalate " ") . map (map show)
 codeAt :: Board -> Point -> PieceOf
 codeAt board (x, y) = board !! x !! y
 
--- squareIsPawn :: Board -> (Num, Num)
 teamAt, teamNotAt :: Board -> Point -> Maybe Team
 teamAt board point = case codeAt board point of
     Piece _ t -> Just t
