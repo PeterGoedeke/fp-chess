@@ -1,0 +1,68 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 7febb8822521fa88f126c6673d60546f0bba7e36b932f2fdb02ac5974b714a9c
+
+name:           fp-chess-haskell
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/fp-chess-haskell#readme>
+homepage:       https://github.com/githubuser/fp-chess-haskell#readme
+bug-reports:    https://github.com/githubuser/fp-chess-haskell/issues
+author:         Author name here
+maintainer:     example@example.com
+copyright:      2020 Author name here
+license:        BSD3
+build-type:     Simple
+extra-source-files:
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/fp-chess-haskell
+
+library
+  exposed-modules:
+      Board
+      Pieces
+      Types
+  other-modules:
+      Paths_fp_chess_haskell
+  hs-source-dirs:
+      src
+  build-depends:
+      array
+    , base >=4.7 && <5
+    , control-bool
+  default-language: Haskell2010
+
+executable fp-chess-haskell-exe
+  main-is: Chess.hs
+  other-modules:
+      Paths_fp_chess_haskell
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -fwarn-incomplete-patterns
+  build-depends:
+      array
+    , base >=4.7 && <5
+    , control-bool
+    , fp-chess-haskell
+  default-language: Haskell2010
+
+test-suite fp-chess-haskell-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_fp_chess_haskell
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      array
+    , base >=4.7 && <5
+    , control-bool
+    , fp-chess-haskell
+  default-language: Haskell2010

@@ -1,5 +1,3 @@
-{-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
-
 module Types where
 
 import Data.Char
@@ -30,8 +28,10 @@ instance Show PieceOf where
         where case' = caseFromTeam team
     show None = "0"
 
+caseFromTeam :: Team -> String -> String
 caseFromTeam White = map toUpper
 caseFromTeam Black = map toLower
 
 type Board = [[PieceOf]]
+type MoveBoard = [[Bool]]
 type Point = (Int, Int)

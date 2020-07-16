@@ -1,5 +1,3 @@
-{-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
-
 module Board where
 
 import Types
