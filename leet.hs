@@ -1,6 +1,10 @@
+import Data.List
+import System.IO
+
 streamThing :: Int -> [Int] -> Int
 streamThing = (sum .) . takeWhile . flip (<)
 
+streamThing2 :: Int -> [Int] -> Int
 streamThing2 limit = foldl1 (\acc x -> let val = acc + x in (if val <= limit then val else acc))
 
 streamThing3 (x:xs) acc limit
