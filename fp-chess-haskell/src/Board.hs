@@ -48,7 +48,7 @@ teamIs, teamIsnt :: PieceOf -> Team -> Maybe Bool
 teamIs (Piece _ t) team = Just $ t == team
 teamIs (None) team = Nothing
 
-teamIsnt = (notM .) . teamIs
+teamIsnt p t = (pure not) <*> (teamIs p t)
 
 pawnDirection :: (Num a) => PieceOf -> Maybe a
 pawnDirection (Piece _ t) = Just (if t == White then 1 else -1)
